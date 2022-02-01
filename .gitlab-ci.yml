@@ -9,7 +9,7 @@ stages:
   - package
   - deploy
 
-delivery-service:package:
+spacex-service:package:
   image: maven:3.8.4-jdk-11
   stage: package
   script: cd spacex-flight-api && mvn package
@@ -23,7 +23,7 @@ delivery-service:package:
       - spacex-flight-api/**/*    
 
 
-heroku-deploy-delivery:
+spacex-service:deploy:
   stage: deploy
   script:
   - cd spacex-flight-api
