@@ -1,0 +1,41 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - package
+  - deploy
+
+delivery-service:package:
+  image: maven:3.8.4-jdk-11
+  stage: package
+  script: cd spacex-flight-api && mvn package
+  artifacts:
+    paths:
+      - spacex-flight-api/target/*.jar
+  only:
+    refs:
+      - main
+    changes:
+      - spacex-flight-api/**/*    
+
+
+heroku-deploy-delivery:
+  stage: deploy
+  script:
+  - cd spacex-flight-api
+  - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/spacex-flights-dev/web .
+  - docker login -u _ -p $HEROKU_TOKEN_TUM registry.heroku.com
+  - docker push registry.heroku.com/spacex-flights-dev/web
+  - apk add --no-cache curl
+  - echo "Docker Image ID is $(cat imageid.txt)"
+  - |-
+    curl -X PATCH https://api.heroku.com/apps/spacex-flights-dev/formation --header "Content-Type: application/json" --header "Accept: application/vnd.heroku+json; version=3.docker-releases" --header "Authorization: Bearer $HEROKU_TOKEN_TUM" --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid.txt)'" } ] }'        
+  only:
+    refs:
+      - main
+    changes:
+      - spacex-flight-api/**/* 
