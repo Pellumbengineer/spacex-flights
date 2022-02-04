@@ -1,5 +1,8 @@
 package com.baboci.spacexflightapi;
 
+import com.baboci.spacexflightapi.controller.DragonController;
+import com.baboci.spacexflightapi.controller.LaunchesController;
+import com.baboci.spacexflightapi.controller.RocketController;
 import com.baboci.spacexflightapi.error.ControllerAdviceHandler;
 import com.baboci.spacexflightapi.error.EmptyListException;
 import com.baboci.spacexflightapi.service.DragonService;
@@ -29,6 +32,10 @@ public class ComponentUnitTest {
         assertNotNull(applicationContext.getBean(DragonService.class));
         assertNotNull(applicationContext.getBean(EmptyListException.class));
         assertNotNull(applicationContext.getBean(ControllerAdviceHandler.class));
+
+        assertNotNull(applicationContext.getBean(DragonController.class));
+        assertNotNull(applicationContext.getBean(LaunchesController.class));
+        assertNotNull(applicationContext.getBean(RocketController.class));
     }
 
     @Test
