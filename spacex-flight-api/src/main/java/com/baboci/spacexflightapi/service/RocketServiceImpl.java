@@ -26,57 +26,63 @@ public class RocketServiceImpl implements RocketService {
         return Arrays.asList(Objects.requireNonNull(rocketsArray));
     }
 
+    private int getRocketPayload(Rocket rocket) {
+        if (rocket.getPayload_weights().size() == 0){
+            throw new EmptyListException("The rockets payload weight list is empty!");
+        }
+        List<Integer> kgsOfPayload = rocket.getPayload_weights().stream().map(RocketPayloadWeight::getKg).collect(Collectors.toList());
+        return kgsOfPayload
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
     @Override
     public int totalLoadSentOfAllRockets() {
         List<Rocket> rockets = apiRequest();
         if (rockets.size() == 0){
             throw new EmptyListException("The rockets list is empty!");
         }
-
-        List<Integer> kgs = rockets.stream().map(rocket -> {
-            if (rocket.getPayload_weights().size() == 0){
-                throw new EmptyListException("The rockets payload weight list is empty!");
-            }
-            List<Integer> kgsOfRocket = rocket.getPayload_weights().stream().map(RocketPayloadWeight::getKg).collect(Collectors.toList());
-            return kgsOfRocket.stream().mapToInt(Integer::intValue).sum();
-        }) .collect(Collectors.toList());
-
-        return kgs.stream().mapToInt(Integer::intValue).sum();
+        List<Integer> payloadWeightKgs = rockets
+                .stream()
+                .map(this::getRocketPayload)
+                .collect(Collectors.toList());
+        return payloadWeightKgs
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     @Override
     public int totalLoadSentOfFalconRockets() {
-
         List<Rocket> rockets = apiRequest();
         if (rockets.size() == 0){
             throw new EmptyListException("The rockets list is empty!");
         }
-        List<Integer> kgs = rockets.stream().map(rocket -> {
-            if (rocket.getName().contains("Falcon")){
-                if (rocket.getPayload_weights().size() == 0){
-                    throw new EmptyListException("The rockets payload weight list is empty!");
-                }
-                List<Integer> kgsOfRocket = rocket.getPayload_weights().stream().map(RocketPayloadWeight::getKg).collect(Collectors.toList());
-                return kgsOfRocket.stream().mapToInt(Integer::intValue).sum();
-            }
-            return 0;
-        }) .collect(Collectors.toList());
-        return kgs.stream().mapToInt(Integer::intValue).sum();
+        List<Integer> payloadWeightKgs = rockets
+                .stream()
+                .filter(rocket -> rocket.getName().contains("Falcon"))
+                .map(this::getRocketPayload)
+                .collect(Collectors.toList());
+        return payloadWeightKgs
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     @Override
     public float successRateOfAllRockets() {
         List<Rocket> rockets = apiRequest();
-
         if (rockets.size() == 0){
             throw new EmptyListException("The rockets list is empty!");
         }
-
-        List<Integer> percentages = rockets.stream().map(Rocket::getSuccess_rate_pct)
+        List<Integer> percentages = rockets
+                .stream()
+                .map(Rocket::getSuccess_rate_pct)
                 .collect(Collectors.toList());
-
-        float totalPct = (float) percentages.stream().mapToInt(Integer::intValue).sum() / percentages.size();
-        System.out.println(totalPct);
-        return totalPct;
+        return (float) percentages
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum() / percentages.size();
     }
 }

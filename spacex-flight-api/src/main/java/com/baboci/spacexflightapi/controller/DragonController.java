@@ -19,8 +19,8 @@ public class DragonController {
 
     @Operation(summary = "Get total time spent in space of all Dragon flights")
     @GetMapping("/totalTime")
-    public ResponseEntity<?> getTotalTimeInSpaceOfAllDragonFlights(){
+    public ResponseEntity<?> getTotalTimeInSpaceOfAllDragonFlightsInYear(){
         int totalTime = dragonService.totalTimeInSpaceOfAllDragonFlights();
-        return ResponseEntity.ok().body("Total time spent in space of all Dragon flights: "+ totalTime +" years" );
+        return ResponseEntity.ok().body(totalTime);
     }
 }

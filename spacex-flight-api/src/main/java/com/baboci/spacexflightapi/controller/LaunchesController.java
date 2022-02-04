@@ -22,13 +22,13 @@ public class LaunchesController {
     @GetMapping("total")
     public ResponseEntity<?> getTotalLaunches(){
         int totalLaunches = launchesService.totalLaunches();
-        return ResponseEntity.ok().body("Total Launches: "+ totalLaunches);
+        return ResponseEntity.ok().body(totalLaunches);
     }
 
     @Operation(summary = "Get total number of successful launches")
     @GetMapping("/successful")
     public ResponseEntity<?> getSuccessfulLaunches(){
         int successfulLaunches = launchesService.successfulLaunches();
-        return ResponseEntity.ok().body("Successful launches: "+ successfulLaunches);
+        return ResponseEntity.ok().body(successfulLaunches);
     }
 }

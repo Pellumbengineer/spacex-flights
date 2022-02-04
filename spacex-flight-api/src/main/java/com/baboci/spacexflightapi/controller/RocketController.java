@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 public class RocketController {
 
     final RestTemplate restTemplate;
-
     final RocketService rocketService;
 
     public RocketController(RestTemplate restTemplate, RocketService rocketService) {
@@ -25,22 +24,22 @@ public class RocketController {
 
     @Operation(summary = "Get total load of all rockets")
     @GetMapping("/load")
-    public ResponseEntity<?> getTotalLoadUsingAllRockets(){
+    public ResponseEntity<?> getTotalLoadUsingAllRocketsInKg(){
         int totalLoad = rocketService.totalLoadSentOfAllRockets();
-        return ResponseEntity.ok().body("Total load sent to space using all rockets: "+ totalLoad + " kg");
+        return ResponseEntity.ok().body(totalLoad);
     }
 
     @Operation(summary = "Get total load of Falcon rockets")
     @GetMapping("/load/falcon")
-    public ResponseEntity<?> getTotalLoadUsingFalcon(){
+    public ResponseEntity<?> getTotalLoadUsingFalconInKg(){
         int totalLoad = rocketService.totalLoadSentOfFalconRockets();
-        return ResponseEntity.ok().body("Total load sent to space using Falcon: "+ totalLoad + " kg");
+        return ResponseEntity.ok().body(totalLoad);
     }
 
     @Operation(summary = "Get overall success rate")
     @GetMapping("/successRate")
     public ResponseEntity<?> getOverallSuccessRate() {
         float successRateOfAllRockets = rocketService.successRateOfAllRockets();
-        return ResponseEntity.ok().body("Overall success rate: "+ successRateOfAllRockets + "%");
+        return ResponseEntity.ok().body(successRateOfAllRockets);
     }
 }

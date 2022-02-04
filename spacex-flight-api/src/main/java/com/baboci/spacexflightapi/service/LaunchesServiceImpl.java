@@ -36,23 +36,24 @@ public class LaunchesServiceImpl implements LaunchesService{
     @Override
     public int successfulLaunches() {
         List<Launches> launchesList = apiRequest();
-
         if (launchesList.size() == 0){
             throw new EmptyListException("The launches list is empty!");
         }
-
-        List<Integer> successfulLaunches = launchesList.stream().map(launches -> {
-            if (launches.getSuccess() == null){
-                // if success field is null, I assume that this launch is not successful
-                return 0;
-            }
-
-            if (launches.getSuccess()){
-                return 1;
-            }
-            return 0;
+        List<Integer> successfulLaunches = launchesList
+                .stream()
+                .map(launches -> {
+                    // if success field is null I want to proceed and assume that this launch is not successful
+                    if (launches.getSuccess() == null){
+                        return 0;
+                    }
+                    if (launches.getSuccess()){
+                        return 1;
+                    }
+                    return 0;
         }).collect(Collectors.toList());
-
-        return successfulLaunches.stream().mapToInt(Integer::intValue).sum();
+        return successfulLaunches
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 }

@@ -2,8 +2,6 @@ package com.baboci.spacexflightapi.service;
 
 import com.baboci.spacexflightapi.error.EmptyListException;
 import com.baboci.spacexflightapi.model.Dragon;
-import com.baboci.spacexflightapi.model.Launches;
-import com.baboci.spacexflightapi.model.RocketPayloadWeight;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,15 +27,17 @@ public class DragonServiceImpl implements DragonService {
 
     @Override
     public int totalTimeInSpaceOfAllDragonFlights() {
-
         List<Dragon> dragonList = apiRequest();
         if (dragonList.size() == 0){
             throw new EmptyListException("The dragon list is empty!");
         }
-
-        List<Integer> years = dragonList.stream().map(Dragon::getOrbit_duration_yr)
+        List<Integer> years = dragonList
+                .stream()
+                .map(Dragon::getOrbit_duration_yr)
                 .collect(Collectors.toList());
-
-        return years.stream().mapToInt(Integer::intValue).sum();
+        return years
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 }
