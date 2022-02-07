@@ -18,5 +18,4 @@ public class ControllerAdviceHandler {
     public ResponseEntity<String> handleAnyException(Exception e){
         return new ResponseEntity<>("Something went wrong! " +e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

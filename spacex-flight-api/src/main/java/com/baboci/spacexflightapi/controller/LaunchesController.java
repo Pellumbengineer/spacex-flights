@@ -1,6 +1,6 @@
 package com.baboci.spacexflightapi.controller;
 
-import com.baboci.spacexflightapi.service.DragonService;
+import com.baboci.spacexflightapi.model.response.LaunchesResponse;
 import com.baboci.spacexflightapi.service.LaunchesService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,17 @@ public class LaunchesController {
     @GetMapping("total")
     public ResponseEntity<?> getTotalLaunches(){
         int totalLaunches = launchesService.totalLaunches();
-        return ResponseEntity.ok().body(totalLaunches);
+        LaunchesResponse launchesResponse = new LaunchesResponse();
+        launchesResponse.setTotal(totalLaunches);
+        return ResponseEntity.ok().body(launchesResponse);
     }
 
     @Operation(summary = "Get total number of successful launches")
     @GetMapping("/successful")
     public ResponseEntity<?> getSuccessfulLaunches(){
         int successfulLaunches = launchesService.successfulLaunches();
-        return ResponseEntity.ok().body(successfulLaunches);
+        LaunchesResponse launchesResponse = new LaunchesResponse();
+        launchesResponse.setTotal(successfulLaunches);
+        return ResponseEntity.ok().body(launchesResponse);
     }
 }

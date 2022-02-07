@@ -1,8 +1,9 @@
 package com.baboci.spacexflightapi.controller;
 
+import com.baboci.spacexflightapi.model.response.LoadResponse;
+import com.baboci.spacexflightapi.model.response.SuccessRateResponse;
 import com.baboci.spacexflightapi.service.RocketService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,20 +27,26 @@ public class RocketController {
     @GetMapping("/load")
     public ResponseEntity<?> getTotalLoadUsingAllRocketsInKg(){
         int totalLoad = rocketService.totalLoadSentOfAllRockets();
-        return ResponseEntity.ok().body(totalLoad);
+        LoadResponse loadResponse = new LoadResponse();
+        loadResponse.setKg(totalLoad);
+        return ResponseEntity.ok().body(loadResponse);
     }
 
     @Operation(summary = "Get total load of Falcon rockets")
     @GetMapping("/load/falcon")
     public ResponseEntity<?> getTotalLoadUsingFalconInKg(){
         int totalLoad = rocketService.totalLoadSentOfFalconRockets();
-        return ResponseEntity.ok().body(totalLoad);
+        LoadResponse loadResponse = new LoadResponse();
+        loadResponse.setKg(totalLoad);
+        return ResponseEntity.ok().body(loadResponse);
     }
 
     @Operation(summary = "Get overall success rate")
     @GetMapping("/successRate")
     public ResponseEntity<?> getOverallSuccessRate() {
         float successRateOfAllRockets = rocketService.successRateOfAllRockets();
-        return ResponseEntity.ok().body(successRateOfAllRockets);
+        SuccessRateResponse successRateResponse = new SuccessRateResponse();
+        successRateResponse.setRate_pct(successRateOfAllRockets);
+        return ResponseEntity.ok().body(successRateResponse);
     }
 }

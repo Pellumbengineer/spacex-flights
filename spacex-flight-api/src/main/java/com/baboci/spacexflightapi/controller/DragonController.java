@@ -1,5 +1,6 @@
 package com.baboci.spacexflightapi.controller;
 
+import com.baboci.spacexflightapi.model.response.TotalTimeResponse;
 import com.baboci.spacexflightapi.service.DragonService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class DragonController {
     @GetMapping("/totalTime")
     public ResponseEntity<?> getTotalTimeInSpaceOfAllDragonFlightsInYear(){
         int totalTime = dragonService.totalTimeInSpaceOfAllDragonFlights();
-        return ResponseEntity.ok().body(totalTime);
+        TotalTimeResponse totalTimeResponse = new TotalTimeResponse();
+        totalTimeResponse.setYear(totalTime);
+        return ResponseEntity.ok().body(totalTimeResponse);
     }
 }

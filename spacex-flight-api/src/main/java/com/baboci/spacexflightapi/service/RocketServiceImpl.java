@@ -30,7 +30,10 @@ public class RocketServiceImpl implements RocketService {
         if (rocket.getPayload_weights().size() == 0){
             throw new EmptyListException("The rockets payload weight list is empty!");
         }
-        List<Integer> kgsOfPayload = rocket.getPayload_weights().stream().map(RocketPayloadWeight::getKg).collect(Collectors.toList());
+        List<Integer> kgsOfPayload = rocket.getPayload_weights()
+                .stream()
+                .map(RocketPayloadWeight::getKg)
+                .collect(Collectors.toList());
         return kgsOfPayload
                 .stream()
                 .mapToInt(Integer::intValue)
