@@ -1,7 +1,9 @@
 package com.baboci.spacexflightapi;
 
 import com.baboci.spacexflightapi.controller.LaunchesController;
+import com.baboci.spacexflightapi.model.response.LaunchesResponse;
 import com.baboci.spacexflightapi.service.LaunchesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,25 +27,30 @@ public class LaunchesControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Test
     public void testCalculateTotalLaunches() throws Exception {
+        LaunchesResponse launchesResponseExpected = new LaunchesResponse();
+        launchesResponseExpected.setTotal(10);
         int actualTotalLaunches = 10;
-        int expectedTotalLaunches = 10;
 
         Mockito.when(launchesService.totalLaunches()).thenReturn(actualTotalLaunches);
         mockMvc.perform(get("/launches/total"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(expectedTotalLaunches)));
+                .andExpect(content().string(objectMapper.writeValueAsString(launchesResponseExpected)));
     }
 
     @Test
     public void testCalculateTotalSuccessfulLaunches() throws Exception {
         int actualTotalSuccessful = 100;
-        int expectedTotalSuccessful = 100;
+        LaunchesResponse launchesResponseExpected = new LaunchesResponse();
+        launchesResponseExpected.setTotal(100);
 
         Mockito.when(launchesService.successfulLaunches()).thenReturn(actualTotalSuccessful);
         mockMvc.perform(get("/launches/successful"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(expectedTotalSuccessful)));
+                .andExpect(content().string(objectMapper.writeValueAsString(launchesResponseExpected)));
     }
 }
